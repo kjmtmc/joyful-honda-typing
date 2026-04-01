@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ジョイフル本田 あるある タイピング</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  background: #f4f4f0;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 680px;
+  width: 100%;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+}
+h1 { font-size: 20px; font-weight: 700; color: #111; text-align:center; margin-bottom:4px; }
+.sub { font-size:11px; color:#aaa; text-align:center; letter-spacing:.12em; margin-bottom:1.5rem; }
+.stats { display:flex; gap:10px; margin-bottom:1rem; }
+.stat { flex:1; background:#f4f4f0; border-radius:10px; padding:10px; text-align:center; }
+.stat-l { font-size:11px; color:#999; margin-bottom:2px; }
+.stat-v { font-size:18px; font-weight:700; color:#111; }
+.prog-wrap { height:4px; background:#eee; border-radius:2px; margin-bottom:1.25rem; overflow:hidden; }
+.prog-bar { height:100%; background:#111; border-radius:2px; transition:width .3s; }
+.phrase-box {
+  background:#f9f9f7; border:1.5px solid #e8e8e4; border-radius:12px;
+  padding:1.2rem 1.4rem; margin-bottom:6px;
+  min-height:60px; display:flex; flex-wrap:wrap; align-items:center;
+  font-size:1.5rem; line-height:2.2; font-family:'Courier New',monospace;
+}
+.c-done { color:#ccc; }
+.c-cur  { color:#111; background:#dbeafe; border-radius:3px; padding:0 1px; }
+.c-pend { color:#ddd; }
+.ro-hint {
+  font-size:13px; font-family:'Courier New',monospace;
+  color:#999; padding:2px 4px 10px; min-height:22px;
+}
+.inp-row { display:flex; gap:8px; margin-bottom:6px; }
+.inp-row input {
+  flex:1; font-family:'Courier New',monospace; font-size:16px;
+  padding:10px 14px; border:1.5px solid #ddd; border-radius:8px;
+  outline:none; transition:border-color .2s;
+  caret-color: transparent;
+}
+.inp-row input:focus { border-color:#111; }
+button {
+  background:#111; color:#fff; border:none; border-radius:8px;
+  padding:10px 20px; font-size:14px; cursor:pointer;
+  font-family:inherit; font-weight:600; transition:background .15s;
+}
+button:hover { background:#333; }
+.err { font-size:12px; color:#e53e3e; min-height:18px; padding-left:2px; }
+.start-screen, .result-screen { text-align:center; padding:2rem 0; }
+.start-screen p { font-size:15px; color:#666; line-height:1.9; margin-bottom:1.5rem; }
+.start-screen button, .result-screen button { font-size:16px; padding:14px 44px; }
+.res-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:1.5rem 0; }
+.res-box { background:#f4f4f0; border-radius:10px; padding:1rem; text-align:center; }
+.res-l { font-size:12px; color:#999; margin-bottom:4px; }
+.res-v { font-size:22px; font-weight:700; color:#111; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>ジョイフル本田 あるある タイピング</h1>
+  <p class="sub">JOYFUL HONDA TYPING GAME</p>
+
+  <div class="start-screen" id="scr-start">
+    <p>ジョイフル本田あるあるを<br>ローマ字でタイピングしよう！<br>全14フレーズに挑戦！</p>
+    <button id="btn-start">スタート</button>
+  </div>
+
+  <div id="scr-game" style="display:none">
+    <div class="stats">
+      <div class="stat"><div class="stat-l">フレーズ</div><div class="stat-v"><span id="s-idx">1</span>/<span id="s-tot"></span></div></div>
+      <div class="stat"><div class="stat-l">タイム</div><div class="stat-v"><span id="s-time">0.0</span>s</div></div>
+      <div class="stat"><div class="stat-l">正確率</div><div class="stat-v"><span id="s-acc">100</span>%</div></div>
+      <div class="stat"><div class="stat-l">ミス</div><div class="stat-v"><span id="s-miss">0</span></div></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar" id="prog" style="width:0%"></div></div>
+    <div class="phrase-box" id="phrase"></div>
+    <div class="ro-hint" id="hint"></div>
+    <div class="inp-row">
+      <input type="text" id="inp" placeholder="ここをクリックしてからキーボードで入力"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly>
+      <button id="btn-skip">スキップ</button>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div class="result-screen" id="scr-result" style="display:none">
+    <div style="font-size:22px;font-weight:700;margin-bottom:6px;">お疲れ様でした！</div>
+    <div style="font-size:13px;color:#aaa;margin-bottom:4px;">全フレーズクリア</div>
+    <div class="res-grid">
+      <div class="res-box"><div class="res-l">タイム</div><div class="res-v" id="r-time">-</div></div>
+      <div class="res-box"><div class="res-l">正確率</div><div class="res-v" id="r-acc">-</div></div>
+      <div class="res-box"><div class="res-l">ミス数</div><div class="res-v" id="r-miss">-</div></div>
+    </div>
+    <button id="btn-retry">もう一度</button>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// かな→ローマ字対応テーブル（優先度順）
+// ================================================================
+const TABLE = [
+  ['しゃ',['sha','sya']], ['しゅ',['shu','syu']], ['しょ',['sho','syo']],
+  ['ちゃ',['cha','tya','cya']], ['ちゅ',['chu','tyu','cyu']], ['ちょ',['cho','tyo','cyo']],
+  ['じゃ',['ja','zya','jya']], ['じゅ',['ju','zyu','jyu']], ['じょ',['jo','zyo','jyo']],
+  ['にゃ',['nya']], ['にゅ',['nyu']], ['にょ',['nyo']],
+  ['ひゃ',['hya']], ['ひゅ',['hyu']], ['ひょ',['hyo']],
+  ['みゃ',['mya']], ['みゅ',['myu']], ['みょ',['myo']],
+  ['りゃ',['rya']], ['りゅ',['ryu']], ['りょ',['ryo']],
+  ['ぎゃ',['gya']], ['ぎゅ',['gyu']], ['ぎょ',['gyo']],
+  ['きゃ',['kya']], ['きゅ',['kyu']], ['きょ',['kyo']],
+  ['びゃ',['bya']], ['びゅ',['byu']], ['びょ',['byo']],
+  ['ぴゃ',['pya']], ['ぴゅ',['pyu']], ['ぴょ',['pyo']],
+  ['あ',['a']], ['い',['i']], ['う',['u']], ['え',['e']], ['お',['o']],
+  ['か',['ka']], ['き',['ki']], ['く',['ku']], ['け',['ke']], ['こ',['ko']],
+  ['が',['ga']], ['ぎ',['gi']], ['ぐ',['gu']], ['げ',['ge']], ['ご',['go']],
+  ['さ',['sa']], ['し',['shi','si']], ['す',['su']], ['せ',['se']], ['そ',['so']],
+  ['ざ',['za']], ['じ',['ji','zi']], ['ず',['zu']], ['ぜ',['ze']], ['ぞ',['zo']],
+  ['た',['ta']], ['ち',['chi','ti']], ['つ',['tsu','tu']], ['て',['te']], ['と',['to']],
+  ['だ',['da']], ['ぢ',['di','ji']], ['づ',['du','zu']], ['で',['de']], ['ど',['do']],
+  ['な',['na']], ['に',['ni']], ['ぬ',['nu']], ['ね',['ne']], ['の',['no']],
+  ['は',['ha']], ['ひ',['hi']], ['ふ',['fu','hu']], ['へ',['he']], ['ほ',['ho']],
+  ['ば',['ba']], ['び',['bi']], ['ぶ',['bu']], ['べ',['be']], ['ぼ',['bo']],
+  ['ぱ',['pa']], ['ぴ',['pi']], ['ぷ',['pu']], ['ぺ',['pe']], ['ぽ',['po']],
+  ['ま',['ma']], ['み',['mi']], ['む',['mu']], ['め',['me']], ['も',['mo']],
+  ['や',['ya']], ['ゆ',['yu']], ['よ',['yo']],
+  ['ら',['ra']], ['り',['ri']], ['る',['ru']], ['れ',['re']], ['ろ',['ro']],
+  ['わ',['wa']], ['を',['wo','o']], ['ん',['n','nn']],
+  ['っ',['xtu','ltu']],
+  ['ア',['a']], ['イ',['i']], ['ウ',['u']], ['エ',['e']], ['オ',['o']],
+  ['カ',['ka']], ['キ',['ki']], ['ク',['ku']], ['ケ',['ke']], ['コ',['ko']],
+  ['サ',['sa']], ['シ',['shi','si']], ['ス',['su']], ['セ',['se']], ['ソ',['so']],
+  ['タ',['ta']], ['チ',['chi','ti']], ['ツ',['tsu','tu']], ['テ',['te']], ['ト',['to']],
+  ['ナ',['na']], ['ニ',['ni']], ['ヌ',['nu']], ['ネ',['ne']], ['ノ',['no']],
+  ['ハ',['ha']], ['ヒ',['hi']], ['フ',['fu','hu']], ['ヘ',['he']], ['ホ',['ho']],
+  ['バ',['ba']], ['ビ',['bi']], ['ブ',['bu']], ['ベ',['be']], ['ボ',['bo']],
+  ['パ',['pa']], ['ピ',['pi']], ['プ',['pu']], ['ペ',['pe']], ['ポ',['po']],
+  ['マ',['ma']], ['ミ',['mi']], ['ム',['mu']], ['メ',['me']], ['モ',['mo']],
+  ['ヤ',['ya']], ['ユ',['yu']], ['ヨ',['yo']],
+  ['ラ',['ra']], ['リ',['ri']], ['ル',['ru']], ['レ',['re']], ['ロ',['ro']],
+  ['ワ',['wa']], ['ン',['n','nn']],
+  ['ガ',['ga']], ['ギ',['gi']], ['グ',['gu']], ['ゲ',['ge']], ['ゴ',['go']],
+  ['ザ',['za']], ['ジ',['ji','zi']], ['ズ',['zu']], ['ゼ',['ze']], ['ゾ',['zo']],
+  ['ダ',['da']], ['デ',['de']], ['ド',['do']],
+  ['ッ',['xtu','ltu']],
+  ['ー',['-']], ['、',[',']], ['。',['.']], ['！',['!']], ['？',['?']], ['…',['...']],
+];
+
+const KMAP = new Map(TABLE);
+const KEYS = [...KMAP.keys()].sort((a,b) => b.length - a.length);
+
+// ================================================================
+// フレーズ定義
+// kana: ひらがな読み（null なら disp をそのまま ASCII 処理）
+// ================================================================
+const PHRASES = [
+  { disp:'荒川に振替とりに行って来て',               kana:'あらかわにふりかえとりにいってきて' },
+  { disp:'一旦カート回収お願いします。',              kana:'いったんかーとかいしゅうおねがいします。' },
+  { disp:'上の人呼んで',                              kana:'うえのひとよんで' },
+  { disp:'英語分かる人いる？',                        kana:'えいごわかるひといる？' },
+  { disp:'オリコンの大きさ違うじゃん！',              kana:'おりこんのおおきさちがうじゃん！' },
+  { disp:'カートが道においてあるって電話が入ってます', kana:'かーとがみちにおいてあるってでんわがはいってます' },
+  { disp:'救急車呼んで！',                            kana:'きゅうきゅうしゃよんで！' },
+  { disp:'苦情はどこで言ったらいいの？',              kana:'くじょうはどこでいったらいいの？' },
+  { disp:'健康診断は決まって休みの日',                kana:'けんこうしんだんはきまってやすみのひ' },
+  { disp:'小高常務の売り場づくりセンス',              kana:'こだかじょうむのうりばづくりせんす' },
+  { disp:'Yeah, we global — JOYFUL Honda,',           kana:null },
+  { disp:'Building dreams from Kanto to Uganda.',     kana:null },
+  { disp:'Power tools, garden gear, all in stock,',   kana:null },
+  { disp:'Open the doors, 6AM — tick to tock.',       kana:null },
+];
+
+// ================================================================
+// セグメント構築
+// ================================================================
+function buildSegments(phrase) {
+  const segs = [];
+  const src = phrase.kana !== null ? phrase.kana : phrase.disp;
+
+  let i = 0;
+  while (i < src.length) {
+    const c = src[i];
+    // ASCII
+    if (c.charCodeAt(0) < 128) {
+      if (c === ' ') { i++; continue; } // スペース不要
+      segs.push({ disp: c, pats: [c.toLowerCase()], isN: false, isXtu: false, ascii: true });
+      i++;
+      continue;
+    }
+    // かな最長一致
+    let matched = false;
+    for (const k of KEYS) {
+      if (src.slice(i, i + k.length) === k) {
+        segs.push({
+          disp: k,
+          pats: [...KMAP.get(k)],
+          isN:   k === 'ん' || k === 'ン',
+          isXtu: k === 'っ' || k === 'ッ',
+          ascii: false,
+        });
+        i += k.length; matched = true; break;
+      }
+    }
+    if (!matched) {
+      segs.push({ disp: c, pats: [c], isN: false, isXtu: false, ascii: false });
+      i++;
+    }
+  }
+
+  // っ/ッ → 次の子音2連打パターン追加
+  for (let s = 0; s < segs.length - 1; s++) {
+    if (segs[s].isXtu) {
+      const nc = segs[s + 1].pats[0][0];
+      if (/[bcdfghjklmnpqrstvwxyz]/.test(nc)) {
+        segs[s].pats.push(nc + nc);
+      }
+    }
+  }
+
+  return segs;
+}
+
+// ================================================================
+// ゲーム状態
+// ================================================================
+let pIdx = 0, segs = [], segIdx = 0, buf = '';
+let missCount = 0, totalTyped = 0;
+let startTime = null, timerInt = null;
+let active = false;
+
+// ================================================================
+// 画面切り替え
+// ================================================================
+function show(id) {
+  ['scr-start','scr-game','scr-result'].forEach(s =>
+    document.getElementById(s).style.display = (s === id ? '' : 'none')
+  );
+}
+
+function startGame() {
+  pIdx = 0; missCount = 0; totalTyped = 0;
+  startTime = null; clearInterval(timerInt);
+  document.getElementById('s-tot').textContent = PHRASES.length;
+  active = true;
+  show('scr-game');
+  loadPhrase();
+}
+
+function loadPhrase() {
+  segs = buildSegments(PHRASES[pIdx]);
+  segIdx = 0; buf = '';
+  document.getElementById('s-idx').textContent = pIdx + 1;
+  document.getElementById('prog').style.width = (pIdx / PHRASES.length * 100) + '%';
+  document.getElementById('err').textContent = '';
+  render();
+}
+
+function render() {
+  const phraseEl = document.getElementById('phrase');
+  phraseEl.innerHTML = '';
+  for (let s = 0; s < segs.length; s++) {
+    const sp = document.createElement('span');
+    sp.textContent = segs[s].disp;
+    sp.className = s < segIdx ? 'c-done' : s === segIdx ? 'c-cur' : 'c-pend';
+    phraseEl.appendChild(sp);
+  }
+  if (segIdx < segs.length) {
+    const cur = segs[segIdx].pats[0];
+    const rest = segs.slice(segIdx + 1, segIdx + 12).map(s => s.pats[0]).join('');
+    document.getElementById('hint').textContent = '→ ' + buf + cur.slice(buf.length) + rest;
+  } else {
+    document.getElementById('hint').textContent = '';
+  }
+}
+
+function updateStats() {
+  const acc = totalTyped > 0 ? Math.round((totalTyped - missCount) / totalTyped * 100) : 100;
+  document.getElementById('s-acc').textContent = acc;
+  document.getElementById('s-miss').textContent = missCount;
+}
+
+// ================================================================
+// キー入力処理（keydown で1文字ずつ）
+// ================================================================
+document.addEventListener('keydown', function(e) {
+  if (!active) return;
+  if (segIdx >= segs.length) return;
+  if (e.key.length !== 1) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  e.preventDefault();
+
+  // タイマー開始
+  if (!startTime) {
+    startTime = Date.now();
+    timerInt = setInterval(() => {
+      document.getElementById('s-time').textContent =
+        ((Date.now() - startTime) / 1000).toFixed(1);
+    }, 100);
+  }
+
+  processChar(e.key.toLowerCase());
+  updateStats();
+  render();
+  if (segIdx >= segs.length) nextPhrase();
+});
+
+function processChar(ch) {
+  if (segIdx >= segs.length) return;
+  const seg = segs[segIdx];
+
+  // ── ASCII（英語フレーズ）──
+  if (seg.ascii) {
+    if (ch === seg.pats[0]) {
+      segIdx++; totalTyped++;
+      document.getElementById('err').textContent = '';
+    } else {
+      missCount++; totalTyped++;
+      document.getElementById('err').textContent = '× ミス！「' + seg.pats[0] + '」を入力';
+    }
+    return;
+  }
+
+  // ── ん ──
+  if (seg.isN) {
+    if (ch === 'n') {
+      const newBuf = buf + 'n';
+      if (newBuf === 'nn') {
+        // nn で確定
+        segIdx++; totalTyped++; buf = '';
+        document.getElementById('err').textContent = '';
+      } else {
+        // buf === '' → n 1文字
+        const next = segs[segIdx + 1];
+        const nf = next ? next.pats[0][0] : '';
+        if (!next || !/^[aiueoyn]/.test(nf)) {
+          // 次が母音/y/nでない → n単独で確定
+          segIdx++; totalTyped++; buf = '';
+          document.getElementById('err').textContent = '';
+        } else {
+          // nn待ち
+          buf = 'n'; totalTyped++;
+        }
+      }
+    } else if (buf === 'n') {
+      // n の後に別文字 → n で確定して ch を次セグへ
+      segIdx++; totalTyped++; buf = '';
+      document.getElementById('err').textContent = '';
+      if (segIdx < segs.length) processChar(ch);
+    } else {
+      miss(seg);
+    }
+    return;
+  }
+
+  // ── っ ──
+  if (seg.isXtu) {
+    const newBuf = buf + ch;
+    // xtu / ltu 前方一致
+    if ('xtu'.startsWith(newBuf) || 'ltu'.startsWith(newBuf)) {
+      if (newBuf === 'xtu' || newBuf === 'ltu') {
+        segIdx++; totalTyped++; buf = '';
+        document.getElementById('err').textContent = '';
+      } else {
+        buf = newBuf; totalTyped++;
+        document.getElementById('err').textContent = '';
+      }
+      return;
+    }
+    // 次の子音2連打（buf空のときのみ）
+    const dbl = seg.pats.find(p => p.length === 2 && p[0] === p[1]);
+    if (dbl && buf === '' && ch === dbl[0]) {
+      // っ消費 → 同じ ch を次セグの1打目に
+      segIdx++; totalTyped++; buf = '';
+      document.getElementById('err').textContent = '';
+      if (segIdx < segs.length) processChar(ch);
+      return;
+    }
+    miss(seg);
+    return;
+  }
+
+  // ── 通常かな ──
+  const newBuf = buf + ch;
+  if (seg.pats.some(p => p.startsWith(newBuf))) {
+    const exact = seg.pats.find(p => p === newBuf);
+    if (exact) {
+      segIdx++; totalTyped++; buf = '';
+      document.getElementById('err').textContent = '';
+    } else {
+      buf = newBuf; totalTyped++;
+      document.getElementById('err').textContent = '';
+    }
+  } else {
+    // バッファ不一致 → ミスにしてバッファリセット、ch 単独で再試行
+    missCount++;
+    buf = '';
+    if (seg.pats.some(p => p.startsWith(ch))) {
+      const exact2 = seg.pats.find(p => p === ch);
+      if (exact2) {
+        segIdx++; totalTyped++; buf = '';
+        document.getElementById('err').textContent = '';
+      } else {
+        buf = ch; totalTyped++;
+        document.getElementById('err').textContent = '';
+      }
+    } else {
+      totalTyped++;
+      document.getElementById('err').textContent = '× ミス！「' + seg.pats[0] + '」を入力';
+    }
+  }
+}
+
+function miss(seg) {
+  missCount++; totalTyped++; buf = '';
+  document.getElementById('err').textContent = '× ミス！「' + seg.pats[0] + '」を入力';
+}
+
+function nextPhrase() {
+  pIdx++; buf = '';
+  if (pIdx >= PHRASES.length) { endGame(); return; }
+  loadPhrase();
+}
+
+function skipPhrase() {
+  const rem = segs.length - segIdx;
+  missCount += rem; totalTyped += rem;
+  nextPhrase(); updateStats();
+}
+
+function endGame() {
+  active = false;
+  clearInterval(timerInt);
+  const t = startTime ? ((Date.now() - startTime) / 1000).toFixed(1) : 0;
+  const acc = totalTyped > 0 ? Math.round((totalTyped - missCount) / totalTyped * 100) : 100;
+  document.getElementById('r-time').textContent = t + 's';
+  document.getElementById('r-acc').textContent = acc + '%';
+  document.getElementById('r-miss').textContent = missCount;
+  document.getElementById('prog').style.width = '100%';
+  show('scr-result');
+}
+
+// ================================================================
+// ボタン
+// ================================================================
+document.getElementById('btn-start').addEventListener('click', startGame);
+document.getElementById('btn-skip').addEventListener('click', skipPhrase);
+document.getElementById('btn-retry').addEventListener('click', startGame);
+</script>
+</body>
+</html>
