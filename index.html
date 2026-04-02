@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>ジョイフル本田 あるある タイピング</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
   font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
   background: #f4f4f0;
@@ -20,7 +20,7 @@ body {
   max-width: 680px;
   width: 100%;
   box-shadow: 0 4px 24px rgba(0,0,0,0.09);
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 h1 { font-size: 18px; font-weight: 700; color: #111; text-align:center; margin-bottom:4px; }
 .sub { font-size:11px; color:#aaa; text-align:center; letter-spacing:.12em; margin-bottom:1.5rem; }
@@ -33,56 +33,54 @@ h1 { font-size: 18px; font-weight: 700; color: #111; text-align:center; margin-b
 .prog-wrap { height:4px; background:#eee; border-radius:2px; margin-bottom:1rem; overflow:hidden; }
 .prog-bar { height:100%; background:#111; border-radius:2px; transition:width .3s; }
 
+/* お手本フレーズ */
+.phrase-label { font-size:11px; color:#999; margin-bottom:4px; }
 .phrase-box {
   background:#f9f9f7; border:1.5px solid #e8e8e4; border-radius:12px;
-  padding:1rem 1.2rem; margin-bottom:6px;
+  padding:1rem 1.2rem; margin-bottom:1rem;
   min-height:56px; display:flex; flex-wrap:wrap; align-items:center;
-  font-size:1.4rem; line-height:2.2; font-family:'Courier New',monospace;
-  cursor: text;
-}
-.c-done { color:#ccc; }
-.c-cur  { color:#111; background:#dbeafe; border-radius:3px; padding:0 1px; }
-.c-pend { color:#ddd; }
-
-.ro-hint {
-  font-size:13px; font-family:'Courier New',monospace;
-  color:#999; padding:2px 4px 8px; min-height:22px;
+  font-size:1.4rem; line-height:2.2;
 }
 
-/* 隠し入力欄（スマホキーボード呼び出し用） */
+/* 入力欄 */
+.input-label { font-size:11px; color:#999; margin-bottom:4px; }
+.input-wrap { position: relative; margin-bottom: 8px; }
 #inp {
-  position: fixed;
-  left: -9999px;
-  top: 50%;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  font-size: 16px; /* iOSズーム防止 */
-}
-
-.tap-hint {
-  text-align: center;
-  font-size: 13px;
-  color: #aaa;
-  margin-bottom: 8px;
-  padding: 6px;
-  border: 1.5px dashed #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-.tap-hint.active {
+  width: 100%;
+  font-size: 18px;
+  padding: 14px 16px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  outline: none;
+  background: #fff;
   color: #111;
-  border-color: #111;
-  background: #f9f9f7;
+  font-family: inherit;
+  transition: border-color .2s;
+  -webkit-appearance: none;
 }
+#inp:focus { border-color: #111; }
+#inp.correct { border-color: #2da44e; background: #f0fdf4; }
+#inp.wrong { border-color: #e53e3e; background: #fff5f5; }
 
-.btn-row { display:flex; gap:8px; margin-bottom:6px; }
-.btn-row button { flex:1; }
+.match-status {
+  font-size: 13px;
+  min-height: 20px;
+  margin-bottom: 8px;
+  padding-left: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.match-char { display: inline-block; font-size: 13px; font-family: monospace; }
+.match-char.ok { color: #2da44e; }
+.match-char.ng { color: #e53e3e; background: #fee; border-radius: 2px; padding: 0 2px; }
+.match-char.rest { color: #bbb; }
 
+.btn-row { display:flex; gap:8px; }
 button {
-  background:#111; color:#fff; border:none; border-radius:8px;
-  padding:12px 20px; font-size:15px; cursor:pointer;
+  flex: 1;
+  background:#111; color:#fff; border:none; border-radius:10px;
+  padding:13px 16px; font-size:15px; cursor:pointer;
   font-family:inherit; font-weight:600;
   -webkit-appearance: none;
   touch-action: manipulation;
@@ -94,18 +92,26 @@ button.secondary {
 }
 button.secondary:active { background: #f4f4f0; }
 
-.err { font-size:12px; color:#e53e3e; min-height:18px; padding-left:2px; margin-bottom: 4px; }
+/* 完了エフェクト */
+.clear-msg {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2da44e;
+  padding: 8px 0;
+  min-height: 40px;
+  transition: opacity .3s;
+}
 
 .start-screen, .result-screen { text-align:center; padding:2rem 0; }
 .start-screen p { font-size:15px; color:#666; line-height:1.9; margin-bottom:1.5rem; }
-.start-screen button { font-size:17px; padding:16px 48px; width: 100%; }
+.start-screen button { font-size:17px; padding:16px; width:100%; flex:none; }
 
 .res-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:1.5rem 0; }
 .res-box { background:#f4f4f0; border-radius:10px; padding:1rem; text-align:center; }
 .res-l { font-size:11px; color:#999; margin-bottom:4px; }
 .res-v { font-size:20px; font-weight:700; color:#111; }
-
-.result-screen button { width: 100%; font-size: 16px; padding: 14px; }
+.result-screen button { width:100%; font-size:16px; padding:14px; flex:none; }
 </style>
 </head>
 <body>
@@ -115,7 +121,8 @@ button.secondary:active { background: #f4f4f0; }
 
   <!-- START -->
   <div class="start-screen" id="scr-start">
-    <p>ジョイフル本田あるあるを<br>ローマ字でタイピングしよう！<br>全14フレーズに挑戦！</p>
+    <p>ジョイフル本田あるあるを<br>タイピングしよう！<br>全14フレーズに挑戦！<br><br>
+    <span style="font-size:13px;color:#aaa;">ローマ字・フリック・かな入力 全対応</span></p>
     <button id="btn-start">スタート</button>
   </div>
 
@@ -128,24 +135,24 @@ button.secondary:active { background: #f4f4f0; }
       <div class="stat"><div class="stat-l">ミス</div><div class="stat-v"><span id="s-miss">0</span></div></div>
     </div>
     <div class="prog-wrap"><div class="prog-bar" id="prog" style="width:0%"></div></div>
-    <div class="phrase-box" id="phrase"></div>
-    <div class="ro-hint" id="hint"></div>
-    <div class="err" id="err"></div>
 
-    <!-- タップでキーボード表示 -->
-    <div class="tap-hint" id="tap-hint" onclick="focusInput()">
-      ⌨️ ここをタップしてキーボードを開く
+    <div class="phrase-label">▼ お手本</div>
+    <div class="phrase-box" id="phrase"></div>
+
+    <div class="input-label">▼ ここに入力してください</div>
+    <div class="input-wrap">
+      <input type="text" id="inp"
+        placeholder="タップして入力開始…"
+        autocomplete="off" autocorrect="off"
+        autocapitalize="off" spellcheck="false">
     </div>
+
+    <div class="match-status" id="match-status"></div>
+    <div class="clear-msg" id="clear-msg"></div>
 
     <div class="btn-row">
       <button class="secondary" id="btn-skip">スキップ</button>
     </div>
-
-    <!-- 隠し入力欄 -->
-    <input id="inp" type="text"
-      autocomplete="off" autocorrect="off"
-      autocapitalize="off" spellcheck="false"
-      inputmode="text">
   </div>
 
   <!-- RESULT -->
@@ -163,123 +170,125 @@ button.secondary:active { background: #f4f4f0; }
 
 <script>
 // ================================================================
-// かな→ローマ字テーブル
+// フレーズ定義
+// target: 入力と比較する文字列（ひらがな or 英語）
+// disp:   画面に表示する文字列
 // ================================================================
-const TABLE = [
-  ['しゃ',['sha','sya']], ['しゅ',['shu','syu']], ['しょ',['sho','syo']],
-  ['ちゃ',['cha','tya','cya']], ['ちゅ',['chu','tyu','cyu']], ['ちょ',['cho','tyo','cyo']],
-  ['じゃ',['ja','zya','jya']], ['じゅ',['ju','zyu','jyu']], ['じょ',['jo','zyo','jyo']],
-  ['にゃ',['nya']], ['にゅ',['nyu']], ['にょ',['nyo']],
-  ['ひゃ',['hya']], ['ひゅ',['hyu']], ['ひょ',['hyo']],
-  ['みゃ',['mya']], ['みゅ',['myu']], ['みょ',['myo']],
-  ['りゃ',['rya']], ['りゅ',['ryu']], ['りょ',['ryo']],
-  ['ぎゃ',['gya']], ['ぎゅ',['gyu']], ['ぎょ',['gyo']],
-  ['きゃ',['kya']], ['きゅ',['kyu']], ['きょ',['kyo']],
-  ['びゃ',['bya']], ['びゅ',['byu']], ['びょ',['byo']],
-  ['ぴゃ',['pya']], ['ぴゅ',['pyu']], ['ぴょ',['pyo']],
-  ['あ',['a']], ['い',['i']], ['う',['u']], ['え',['e']], ['お',['o']],
-  ['か',['ka']], ['き',['ki']], ['く',['ku']], ['け',['ke']], ['こ',['ko']],
-  ['が',['ga']], ['ぎ',['gi']], ['ぐ',['gu']], ['げ',['ge']], ['ご',['go']],
-  ['さ',['sa']], ['し',['shi','si']], ['す',['su']], ['せ',['se']], ['そ',['so']],
-  ['ざ',['za']], ['じ',['ji','zi']], ['ず',['zu']], ['ぜ',['ze']], ['ぞ',['zo']],
-  ['た',['ta']], ['ち',['chi','ti']], ['つ',['tsu','tu']], ['て',['te']], ['と',['to']],
-  ['だ',['da']], ['ぢ',['di','ji']], ['づ',['du','zu']], ['で',['de']], ['ど',['do']],
-  ['な',['na']], ['に',['ni']], ['ぬ',['nu']], ['ね',['ne']], ['の',['no']],
-  ['は',['ha']], ['ひ',['hi']], ['ふ',['fu','hu']], ['へ',['he']], ['ほ',['ho']],
-  ['ば',['ba']], ['び',['bi']], ['ぶ',['bu']], ['べ',['be']], ['ぼ',['bo']],
-  ['ぱ',['pa']], ['ぴ',['pi']], ['ぷ',['pu']], ['ぺ',['pe']], ['ぽ',['po']],
-  ['ま',['ma']], ['み',['mi']], ['む',['mu']], ['め',['me']], ['も',['mo']],
-  ['や',['ya']], ['ゆ',['yu']], ['よ',['yo']],
-  ['ら',['ra']], ['り',['ri']], ['る',['ru']], ['れ',['re']], ['ろ',['ro']],
-  ['わ',['wa']], ['を',['wo','o']], ['ん',['n','nn']],
-  ['っ',['xtu','ltu']],
-  ['ア',['a']], ['イ',['i']], ['ウ',['u']], ['エ',['e']], ['オ',['o']],
-  ['カ',['ka']], ['キ',['ki']], ['ク',['ku']], ['ケ',['ke']], ['コ',['ko']],
-  ['サ',['sa']], ['シ',['shi','si']], ['ス',['su']], ['セ',['se']], ['ソ',['so']],
-  ['タ',['ta']], ['チ',['chi','ti']], ['ツ',['tsu','tu']], ['テ',['te']], ['ト',['to']],
-  ['ナ',['na']], ['ニ',['ni']], ['ヌ',['nu']], ['ネ',['ne']], ['ノ',['no']],
-  ['ハ',['ha']], ['ヒ',['hi']], ['フ',['fu','hu']], ['ヘ',['he']], ['ホ',['ho']],
-  ['バ',['ba']], ['ビ',['bi']], ['ブ',['bu']], ['ベ',['be']], ['ボ',['bo']],
-  ['パ',['pa']], ['ピ',['pi']], ['プ',['pu']], ['ペ',['pe']], ['ポ',['po']],
-  ['マ',['ma']], ['ミ',['mi']], ['ム',['mu']], ['メ',['me']], ['モ',['mo']],
-  ['ヤ',['ya']], ['ユ',['yu']], ['ヨ',['yo']],
-  ['ラ',['ra']], ['リ',['ri']], ['ル',['ru']], ['レ',['re']], ['ロ',['ro']],
-  ['ワ',['wa']], ['ン',['n','nn']],
-  ['ガ',['ga']], ['ギ',['gi']], ['グ',['gu']], ['ゲ',['ge']], ['ゴ',['go']],
-  ['ザ',['za']], ['ジ',['ji','zi']], ['ズ',['zu']], ['ゼ',['ze']], ['ゾ',['zo']],
-  ['ダ',['da']], ['デ',['de']], ['ド',['do']],
-  ['ッ',['xtu','ltu']],
-  ['ー',['-']], ['、',[',']], ['。',['.']], ['！',['!']], ['？',['?']], ['…',['...']],
-];
-
-const KMAP = new Map(TABLE);
-const KEYS = [...KMAP.keys()].sort((a,b) => b.length - a.length);
-
 const PHRASES = [
-  { disp:'荒川に振替とりに行って来て',               kana:'あらかわにふりかえとりにいってきて' },
-  { disp:'一旦カート回収お願いします。',              kana:'いったんかーとかいしゅうおねがいします。' },
-  { disp:'上の人呼んで',                              kana:'うえのひとよんで' },
-  { disp:'英語分かる人いる？',                        kana:'えいごわかるひといる？' },
-  { disp:'オリコンの大きさ違うじゃん！',              kana:'おりこんのおおきさちがうじゃん！' },
-  { disp:'カートが道においてあるって電話が入ってます', kana:'かーとがみちにおいてあるってでんわがはいってます' },
-  { disp:'救急車呼んで！',                            kana:'きゅうきゅうしゃよんで！' },
-  { disp:'苦情はどこで言ったらいいの？',              kana:'くじょうはどこでいったらいいの？' },
-  { disp:'健康診断は決まって休みの日',                kana:'けんこうしんだんはきまってやすみのひ' },
-  { disp:'小高常務の売り場づくりセンス',              kana:'こだかじょうむのうりばづくりせんす' },
-  { disp:'Yeah, we global — JOYFUL Honda,',           kana:null },
-  { disp:'Building dreams from Kanto to Uganda.',     kana:null },
-  { disp:'Power tools, garden gear, all in stock,',   kana:null },
-  { disp:'Open the doors, 6AM — tick to tock.',       kana:null },
+  { disp:'荒川に振替とりに行って来て',               target:'あらかわにふりかえとりにいってきて' },
+  { disp:'一旦カート回収お願いします。',              target:'いったんかーとかいしゅうおねがいします。' },
+  { disp:'上の人呼んで',                              target:'うえのひとよんで' },
+  { disp:'英語分かる人いる？',                        target:'えいごわかるひといる？' },
+  { disp:'オリコンの大きさ違うじゃん！',              target:'おりこんのおおきさちがうじゃん！' },
+  { disp:'カートが道においてあるって電話が入ってます', target:'かーとがみちにおいてあるってでんわがはいってます' },
+  { disp:'救急車呼んで！',                            target:'きゅうきゅうしゃよんで！' },
+  { disp:'苦情はどこで言ったらいいの？',              target:'くじょうはどこでいったらいいの？' },
+  { disp:'健康診断は決まって休みの日',                target:'けんこうしんだんはきまってやすみのひ' },
+  { disp:'小高常務の売り場づくりセンス',              target:'こだかじょうむのうりばづくりせんす' },
+  { disp:'Yeah, we global — JOYFUL Honda,',           target:'yeah, we global — joyful honda,' },
+  { disp:'Building dreams from Kanto to Uganda.',     target:'building dreams from kanto to uganda.' },
+  { disp:'Power tools, garden gear, all in stock,',   target:'power tools, garden gear, all in stock,' },
+  { disp:'Open the doors, 6AM — tick to tock.',       target:'open the doors, 6am — tick to tock.' },
 ];
 
-// ================================================================
-// セグメント構築
-// ================================================================
-function buildSegments(phrase) {
-  const segs = [];
-  const src = phrase.kana !== null ? phrase.kana : phrase.disp;
+// カタカナ→ひらがな変換
+function toHira(str) {
+  return str.replace(/[\u30A1-\u30F6]/g, c =>
+    String.fromCharCode(c.charCodeAt(0) - 0x60)
+  );
+}
+
+// ローマ字→ひらがな変換テーブル（長い順）
+const ROMA_TABLE = [
+  ['sha','し'],['shi','し'],['shu','し'],['sho','し'],
+  ['chi','ち'],['tchi','っち'],['cchi','っち'],
+  ['tsu','つ'],['ttsu','っつ'],
+  ['sya','し'],['syu','し'],['syo','し'],
+  ['tya','ち'],['tyu','ち'],['tyo','ち'],
+  ['cya','ち'],['cyu','ち'],['cyo','ち'],
+  ['zya','じ'],['zyu','じ'],['zyo','じ'],
+  ['jya','じ'],['jyu','じ'],['jyo','じ'],
+  ['nya','にゃ'],['nyu','にゅ'],['nyo','にょ'],
+  ['hya','ひゃ'],['hyu','ひゅ'],['hyo','ひょ'],
+  ['mya','みゃ'],['myu','みゅ'],['myo','みょ'],
+  ['rya','りゃ'],['ryu','りゅ'],['ryo','りょ'],
+  ['gya','ぎゃ'],['gyu','ぎゅ'],['gyo','ぎょ'],
+  ['kya','きゃ'],['kyu','きゅ'],['kyo','きょ'],
+  ['bya','びゃ'],['byu','びゅ'],['byo','びょ'],
+  ['pya','ぴゃ'],['pyu','ぴゅ'],['pyo','ぴょ'],
+  ['ja','じゃ'],['ju','じゅ'],['jo','じょ'],
+  ['sha','しゃ'],['shu','しゅ'],['sho','しょ'],
+  ['cha','ちゃ'],['chu','ちゅ'],['cho','ちょ'],
+  ['xtu','っ'],['ltu','っ'],['ltsu','っ'],
+  ['nn','ん'],['xn','ん'],
+  ['ka','か'],['ki','き'],['ku','く'],['ke','け'],['ko','こ'],
+  ['ga','が'],['gi','ぎ'],['gu','ぐ'],['ge','げ'],['go','ご'],
+  ['sa','さ'],['si','し'],['su','す'],['se','せ'],['so','そ'],
+  ['za','ざ'],['zi','じ'],['zu','ず'],['ze','ぜ'],['zo','ぞ'],
+  ['ta','た'],['ti','ち'],['tu','つ'],['te','て'],['to','と'],
+  ['da','だ'],['di','ぢ'],['du','づ'],['de','で'],['do','ど'],
+  ['na','な'],['ni','に'],['nu','ぬ'],['ne','ね'],['no','の'],
+  ['ha','は'],['hi','ひ'],['fu','ふ'],['hu','ふ'],['he','へ'],['ho','ほ'],
+  ['ba','ば'],['bi','び'],['bu','ぶ'],['be','べ'],['bo','ぼ'],
+  ['pa','ぱ'],['pi','ぴ'],['pu','ぷ'],['pe','ぺ'],['po','ぽ'],
+  ['ma','ま'],['mi','み'],['mu','む'],['me','め'],['mo','も'],
+  ['ya','や'],['yu','ゆ'],['yo','よ'],
+  ['ra','ら'],['ri','り'],['ru','る'],['re','れ'],['ro','ろ'],
+  ['wa','わ'],['wo','を'],['wi','ゐ'],['we','ゑ'],
+  ['a','あ'],['i','い'],['u','う'],['e','え'],['o','お'],
+  ['n','ん'],
+];
+ROMA_TABLE.sort((a,b) => b[0].length - a[0].length);
+
+function romaToHira(str) {
+  let result = '';
+  let s = str.toLowerCase();
   let i = 0;
-  while (i < src.length) {
-    const c = src[i];
-    if (c.charCodeAt(0) < 128) {
-      if (c === ' ') { i++; continue; }
-      segs.push({ disp: c, pats: [c.toLowerCase()], isN: false, isXtu: false, ascii: true });
-      i++; continue;
+  while (i < s.length) {
+    // っ：同じ子音2連打
+    if (i+1 < s.length && s[i] === s[i+1] && /[bcdfghjklmnpqrstvwxyz]/.test(s[i]) && s[i] !== 'n') {
+      result += 'っ';
+      i++;
+      continue;
     }
     let matched = false;
-    for (const k of KEYS) {
-      if (src.slice(i, i + k.length) === k) {
-        segs.push({ disp: k, pats: [...KMAP.get(k)], isN: k==='ん'||k==='ン', isXtu: k==='っ'||k==='ッ', ascii: false });
-        i += k.length; matched = true; break;
+    for (const [roma, hira] of ROMA_TABLE) {
+      if (s.slice(i, i+roma.length) === roma) {
+        result += hira;
+        i += roma.length;
+        matched = true;
+        break;
       }
     }
-    if (!matched) { segs.push({ disp: c, pats: [c], isN: false, isXtu: false, ascii: false }); i++; }
-  }
-  // っ → 次の子音2連打
-  for (let s = 0; s < segs.length - 1; s++) {
-    if (segs[s].isXtu) {
-      const nc = segs[s+1].pats[0][0];
-      if (/[bcdfghjklmnpqrstvwxyz]/.test(nc)) segs[s].pats.push(nc + nc);
+    if (!matched) {
+      result += s[i];
+      i++;
     }
   }
-  return segs;
+  return result;
+}
+
+// 入力文字列を正規化してターゲットと比較できる形にする
+function normalize(str) {
+  let s = str;
+  s = toHira(s);           // カタカナ→ひらがな
+  s = romaToHira(s);       // ローマ字→ひらがな（かな入力の場合はそのまま残る）
+  s = s.toLowerCase();
+  return s;
 }
 
 // ================================================================
 // ゲーム状態
 // ================================================================
-let pIdx=0, segs=[], segIdx=0, buf='';
-let missCount=0, totalTyped=0;
-let startTime=null, timerInt=null;
-let active=false;
+let pIdx = 0;
+let missCount = 0;
+let totalTyped = 0;
+let startTime = null;
+let timerInt = null;
+let active = false;
+let prevNorm = ''; // 前回の正規化済み入力（ミスカウント用）
 
 const inp = document.getElementById('inp');
-
-function focusInput() {
-  inp.focus();
-  document.getElementById('tap-hint').classList.add('active');
-  document.getElementById('tap-hint').textContent = '⌨️ キーボード入力中…';
-}
 
 function show(id) {
   ['scr-start','scr-game','scr-result'].forEach(s =>
@@ -294,35 +303,21 @@ function startGame() {
   active = true;
   show('scr-game');
   loadPhrase();
-  setTimeout(focusInput, 300);
+  setTimeout(() => inp.focus(), 300);
 }
 
 function loadPhrase() {
-  segs = buildSegments(PHRASES[pIdx]);
-  segIdx=0; buf='';
-  inp.value='';
+  prevNorm = '';
+  inp.value = '';
+  inp.className = '';
+  document.getElementById('clear-msg').textContent = '';
+  document.getElementById('match-status').innerHTML = '';
   document.getElementById('s-idx').textContent = pIdx+1;
   document.getElementById('prog').style.width = (pIdx/PHRASES.length*100)+'%';
-  document.getElementById('err').textContent = '';
-  render();
-}
 
-function render() {
-  const el = document.getElementById('phrase');
-  el.innerHTML = '';
-  for (let s=0; s<segs.length; s++) {
-    const sp = document.createElement('span');
-    sp.textContent = segs[s].disp;
-    sp.className = s<segIdx ? 'c-done' : s===segIdx ? 'c-cur' : 'c-pend';
-    el.appendChild(sp);
-  }
-  if (segIdx < segs.length) {
-    const cur = segs[segIdx].pats[0];
-    const rest = segs.slice(segIdx+1, segIdx+12).map(s=>s.pats[0]).join('');
-    document.getElementById('hint').textContent = '→ ' + buf + cur.slice(buf.length) + rest;
-  } else {
-    document.getElementById('hint').textContent = '';
-  }
+  // お手本表示
+  document.getElementById('phrase').textContent = PHRASES[pIdx].disp;
+  inp.focus();
 }
 
 function updateStats() {
@@ -332,145 +327,109 @@ function updateStats() {
 }
 
 // ================================================================
-// 入力処理：inputイベント（スマホ対応）+ keydownイベント（PC対応）
+// 入力イベント（IME確定後も含め全対応）
 // ================================================================
-
-// PC用：keydown
-document.addEventListener('keydown', function(e) {
-  if (!active) return;
-  if (segIdx >= segs.length) return;
-  if (e.key.length !== 1) return;
-  if (e.ctrlKey || e.metaKey || e.altKey) return;
-  e.preventDefault();
-  startTimer();
-  processChar(e.key.toLowerCase());
-  inp.value = '';
-  updateStats(); render();
-  if (segIdx >= segs.length) nextPhrase();
-});
-
-// スマホ用：inputイベント（IMEを使わない英数字入力を前提）
 inp.addEventListener('input', function() {
   if (!active) return;
-  const val = inp.value;
-  if (!val) return;
-  startTimer();
-  for (const ch of val.toLowerCase()) {
-    if (segIdx >= segs.length) break;
-    processChar(ch);
-  }
-  inp.value = '';
-  updateStats(); render();
-  if (segIdx >= segs.length) nextPhrase();
-});
 
-// フォーカス外れたら表示を戻す
-inp.addEventListener('blur', function() {
-  if (active) {
-    document.getElementById('tap-hint').classList.remove('active');
-    document.getElementById('tap-hint').textContent = '⌨️ ここをタップしてキーボードを開く';
-  }
-});
-
-function startTimer() {
-  if (!startTime) {
+  // タイマー開始
+  if (!startTime && inp.value.length > 0) {
     startTime = Date.now();
     timerInt = setInterval(() => {
       document.getElementById('s-time').textContent =
         ((Date.now()-startTime)/1000).toFixed(1);
     }, 100);
   }
-}
 
-// ================================================================
-// 文字処理
-// ================================================================
-function processChar(ch) {
-  if (segIdx >= segs.length) return;
-  const seg = segs[segIdx];
+  const raw = inp.value;
+  const norm = normalize(raw);
+  const target = PHRASES[pIdx].target;
 
-  if (seg.ascii) {
-    if (ch === seg.pats[0]) { segIdx++; totalTyped++; document.getElementById('err').textContent=''; }
-    else { missCount++; totalTyped++; document.getElementById('err').textContent='× ミス！「'+seg.pats[0]+'」を入力'; }
-    return;
-  }
-
-  if (seg.isN) {
-    if (ch === 'n') {
-      const newBuf = buf + 'n';
-      if (newBuf === 'nn') {
-        segIdx++; totalTyped++; buf=''; document.getElementById('err').textContent='';
-      } else {
-        const next = segs[segIdx+1];
-        const nf = next ? next.pats[0][0] : '';
-        if (!next || !/^[aiueoyn]/.test(nf)) {
-          segIdx++; totalTyped++; buf=''; document.getElementById('err').textContent='';
-        } else {
-          buf='n'; totalTyped++;
-        }
+  // ミスカウント：前回より長くなった分だけ確認
+  if (norm.length > prevNorm.length) {
+    const added = norm.length - prevNorm.length;
+    for (let i = 0; i < added; i++) {
+      const pos = prevNorm.length + i;
+      if (pos < target.length) {
+        totalTyped++;
+        if (norm[pos] !== target[pos]) missCount++;
       }
-    } else if (buf === 'n') {
-      segIdx++; totalTyped++; buf=''; document.getElementById('err').textContent='';
-      if (segIdx < segs.length) processChar(ch);
-    } else { miss(seg); }
-    return;
-  }
-
-  if (seg.isXtu) {
-    const newBuf = buf + ch;
-    if ('xtu'.startsWith(newBuf) || 'ltu'.startsWith(newBuf)) {
-      if (newBuf==='xtu'||newBuf==='ltu') { segIdx++; totalTyped++; buf=''; document.getElementById('err').textContent=''; }
-      else { buf=newBuf; totalTyped++; document.getElementById('err').textContent=''; }
-      return;
     }
-    const dbl = seg.pats.find(p=>p.length===2&&p[0]===p[1]);
-    if (dbl && buf==='' && ch===dbl[0]) {
-      segIdx++; totalTyped++; buf=''; document.getElementById('err').textContent='';
-      if (segIdx < segs.length) processChar(ch);
-      return;
-    }
-    miss(seg); return;
   }
+  prevNorm = norm;
+  updateStats();
 
-  const newBuf = buf + ch;
-  if (seg.pats.some(p=>p.startsWith(newBuf))) {
-    const exact = seg.pats.find(p=>p===newBuf);
-    if (exact) { segIdx++; totalTyped++; buf=''; document.getElementById('err').textContent=''; }
-    else { buf=newBuf; totalTyped++; document.getElementById('err').textContent=''; }
+  // マッチ状態を表示
+  renderMatchStatus(norm, target);
+
+  // 完全一致チェック
+  if (norm === target) {
+    inp.className = 'correct';
+    document.getElementById('clear-msg').textContent = '✓ クリア！';
+    document.getElementById('match-status').innerHTML = '';
+    setTimeout(() => {
+      nextPhrase();
+    }, 600);
+  } else if (norm.length > 0) {
+    // 先頭から合っているかどうかでborder色を変える
+    let ok = true;
+    for (let i = 0; i < norm.length; i++) {
+      if (i >= target.length || norm[i] !== target[i]) { ok=false; break; }
+    }
+    inp.className = ok ? '' : 'wrong';
   } else {
-    missCount++;
-    buf = '';
-    if (seg.pats.some(p=>p.startsWith(ch))) {
-      const exact2 = seg.pats.find(p=>p===ch);
-      if (exact2) { segIdx++; totalTyped++; document.getElementById('err').textContent=''; }
-      else { buf=ch; totalTyped++; document.getElementById('err').textContent=''; }
-    } else {
-      totalTyped++;
-      document.getElementById('err').textContent = '× ミス！「'+seg.pats[0]+'」を入力';
-    }
+    inp.className = '';
   }
-}
+});
 
-function miss(seg) {
-  missCount++; totalTyped++; buf='';
-  document.getElementById('err').textContent = '× ミス！「'+seg.pats[0]+'」を入力';
+function renderMatchStatus(norm, target) {
+  const el = document.getElementById('match-status');
+  el.innerHTML = '';
+
+  // 最大30文字分表示
+  const len = Math.max(norm.length + 5, 15);
+  for (let i = 0; i < Math.min(len, target.length); i++) {
+    const span = document.createElement('span');
+    span.className = 'match-char';
+    span.textContent = target[i];
+    if (i < norm.length) {
+      span.classList.add(norm[i] === target[i] ? 'ok' : 'ng');
+    } else {
+      span.classList.add('rest');
+    }
+    el.appendChild(span);
+  }
+  if (target.length > len) {
+    const more = document.createElement('span');
+    more.className = 'match-char rest';
+    more.textContent = '…';
+    el.appendChild(more);
+  }
 }
 
 function nextPhrase() {
-  pIdx++; buf=''; inp.value='';
+  pIdx++;
+  inp.value=''; inp.className='';
+  prevNorm='';
+  document.getElementById('clear-msg').textContent='';
+  document.getElementById('match-status').innerHTML='';
   if (pIdx >= PHRASES.length) { endGame(); return; }
   loadPhrase();
-  setTimeout(focusInput, 100);
 }
 
 function skipPhrase() {
-  const rem = segs.length - segIdx;
-  missCount+=rem; totalTyped+=rem;
-  nextPhrase(); updateStats();
+  if (!active) return;
+  const target = PHRASES[pIdx].target;
+  const norm = normalize(inp.value);
+  const remaining = Math.max(0, target.length - norm.length);
+  missCount += remaining;
+  totalTyped += remaining;
+  updateStats();
+  nextPhrase();
 }
 
 function endGame() {
-  active=false; clearInterval(timerInt); inp.blur();
+  active=false; clearInterval(timerInt);
   const t = startTime ? ((Date.now()-startTime)/1000).toFixed(1) : 0;
   const acc = totalTyped>0 ? Math.round((totalTyped-missCount)/totalTyped*100) : 100;
   document.getElementById('r-time').textContent = t+'s';
@@ -483,7 +442,6 @@ function endGame() {
 document.getElementById('btn-start').addEventListener('click', startGame);
 document.getElementById('btn-skip').addEventListener('click', skipPhrase);
 document.getElementById('btn-retry').addEventListener('click', startGame);
-document.getElementById('phrase').addEventListener('click', focusInput);
 </script>
 </body>
 </html>
