@@ -3,130 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>ジョイフル本田 あるある タイピング</title>
+<title>スタンプタイピングゲーム</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
   font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-  background: #f4f4f0;
+  background: #111;
   min-height: 100vh;
   display: flex; align-items: flex-start; justify-content: center;
   padding: 1rem;
 }
 .card {
-  background: #fff;
+  background: #1a1a1a;
   border-radius: 16px;
   padding: 1.5rem;
   max-width: 680px;
   width: 100%;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
   margin-top: 0.5rem;
 }
-h1 { font-size: 18px; font-weight: 700; color: #111; text-align:center; margin-bottom:4px; }
-.sub { font-size:11px; color:#aaa; text-align:center; letter-spacing:.12em; margin-bottom:1.5rem; }
+h1 { font-size: 18px; font-weight: 700; color: #fff; text-align:center; margin-bottom:4px; }
+.sub { font-size:11px; color:#666; text-align:center; letter-spacing:.12em; margin-bottom:1.5rem; }
 
 .stats { display:flex; gap:8px; margin-bottom:1rem; }
-.stat { flex:1; background:#f4f4f0; border-radius:10px; padding:8px 4px; text-align:center; }
-.stat-l { font-size:10px; color:#999; margin-bottom:2px; }
-.stat-v { font-size:16px; font-weight:700; color:#111; }
+.stat { flex:1; background:#222; border-radius:10px; padding:8px 4px; text-align:center; }
+.stat-l { font-size:10px; color:#666; margin-bottom:2px; }
+.stat-v { font-size:16px; font-weight:700; color:#fff; }
 
-.prog-wrap { height:4px; background:#eee; border-radius:2px; margin-bottom:1rem; overflow:hidden; }
-.prog-bar { height:100%; background:#111; border-radius:2px; transition:width .3s; }
+.prog-wrap { height:4px; background:#333; border-radius:2px; margin-bottom:1rem; overflow:hidden; }
+.prog-bar { height:100%; background:#ff6600; border-radius:2px; transition:width .3s; }
 
-/* お手本フレーズ */
-.phrase-label { font-size:11px; color:#999; margin-bottom:4px; }
+.phrase-label { font-size:11px; color:#666; margin-bottom:6px; }
 .phrase-box {
-  background:#f9f9f7; border:1.5px solid #e8e8e4; border-radius:12px;
+  background:#222;
+  border: 2px solid #ff6600;
+  border-radius:12px;
   padding:1rem 1.2rem; margin-bottom:1rem;
-  min-height:56px; display:flex; flex-wrap:wrap; align-items:center;
-  font-size:1.4rem; line-height:2.2;
+  min-height:60px; display:flex; flex-wrap:wrap; align-items:center;
+  font-size:1.6rem; line-height:2; color:#fff; font-weight:700;
+  letter-spacing:.05em;
 }
 
-/* 入力欄 */
-.input-label { font-size:11px; color:#999; margin-bottom:4px; }
-.input-wrap { position: relative; margin-bottom: 8px; }
+.input-label { font-size:11px; color:#666; margin-bottom:4px; }
 #inp {
   width: 100%;
   font-size: 18px;
   padding: 14px 16px;
-  border: 2px solid #ddd;
+  border: 2px solid #333;
   border-radius: 12px;
   outline: none;
-  background: #fff;
-  color: #111;
+  background: #222;
+  color: #fff;
   font-family: inherit;
   transition: border-color .2s;
   -webkit-appearance: none;
+  margin-bottom: 8px;
 }
-#inp:focus { border-color: #111; }
-#inp.correct { border-color: #2da44e; background: #f0fdf4; }
-#inp.wrong { border-color: #e53e3e; background: #fff5f5; }
+#inp:focus { border-color: #ff6600; }
+#inp.correct { border-color: #2da44e; background: #0d1f12; }
+#inp.wrong { border-color: #e53e3e; background: #1f0d0d; }
 
 .match-status {
-  font-size: 13px;
-  min-height: 20px;
-  margin-bottom: 8px;
-  padding-left: 2px;
+  font-size: 15px;
+  min-height: 28px;
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  background: #222;
+  border-radius: 8px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
 }
-.match-char { display: inline-block; font-size: 13px; font-family: monospace; }
+.match-char { display: inline-block; font-size: 15px; font-weight:700; }
 .match-char.ok { color: #2da44e; }
-.match-char.ng { color: #e53e3e; background: #fee; border-radius: 2px; padding: 0 2px; }
-.match-char.rest { color: #bbb; }
+.match-char.ng { color: #e53e3e; background: #2d0d0d; border-radius: 2px; padding: 0 2px; }
+.match-char.rest { color: #444; }
 
-.btn-row { display:flex; gap:8px; }
+.clear-msg {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ff6600;
+  padding: 8px 0;
+  min-height: 44px;
+}
+
+.btn-row { display:flex; gap:8px; margin-top: 4px; }
 button {
   flex: 1;
-  background:#111; color:#fff; border:none; border-radius:10px;
+  background:#ff6600; color:#fff; border:none; border-radius:10px;
   padding:13px 16px; font-size:15px; cursor:pointer;
-  font-family:inherit; font-weight:600;
+  font-family:inherit; font-weight:700;
   -webkit-appearance: none;
   touch-action: manipulation;
 }
-button:active { background:#333; }
+button:active { opacity: 0.8; }
 button.secondary {
-  background: #fff; color: #111;
-  border: 1.5px solid #ddd;
-}
-button.secondary:active { background: #f4f4f0; }
-
-/* 完了エフェクト */
-.clear-msg {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2da44e;
-  padding: 8px 0;
-  min-height: 40px;
-  transition: opacity .3s;
+  background: #222; color: #aaa;
+  border: 1.5px solid #333;
 }
 
 .start-screen, .result-screen { text-align:center; padding:2rem 0; }
-.start-screen p { font-size:15px; color:#666; line-height:1.9; margin-bottom:1.5rem; }
+.start-screen p { font-size:15px; color:#aaa; line-height:1.9; margin-bottom:1.5rem; }
 .start-screen button { font-size:17px; padding:16px; width:100%; flex:none; }
 
 .res-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:1.5rem 0; }
-.res-box { background:#f4f4f0; border-radius:10px; padding:1rem; text-align:center; }
-.res-l { font-size:11px; color:#999; margin-bottom:4px; }
-.res-v { font-size:20px; font-weight:700; color:#111; }
+.res-box { background:#222; border-radius:10px; padding:1rem; text-align:center; }
+.res-l { font-size:11px; color:#666; margin-bottom:4px; }
+.res-v { font-size:20px; font-weight:700; color:#fff; }
 .result-screen button { width:100%; font-size:16px; padding:14px; flex:none; }
+
+.phrase-count { font-size: 12px; color: #666; text-align:right; margin-bottom: 4px; }
 </style>
 </head>
 <body>
 <div class="card">
-  <h1>ジョイフル本田 あるある タイピング</h1>
-  <p class="sub">JOYFUL HONDA TYPING GAME</p>
+  <h1>スタンプ タイピングゲーム</h1>
+  <p class="sub">STAMP TYPING GAME — 全37フレーズ</p>
 
-  <!-- START -->
   <div class="start-screen" id="scr-start">
-    <p>ジョイフル本田あるあるを<br>タイピングしよう！<br>全14フレーズに挑戦！<br><br>
-    <span style="font-size:13px;color:#aaa;">ローマ字・フリック・かな入力 全対応</span></p>
+    <p>スタンプのセリフを<br>タイピングしよう！<br>全37フレーズに挑戦！<br><br>
+    <span style="font-size:13px;color:#555;">フリック・かな・ローマ字 全対応</span></p>
     <button id="btn-start">スタート</button>
   </div>
 
-  <!-- GAME -->
   <div id="scr-game" style="display:none">
     <div class="stats">
       <div class="stat"><div class="stat-l">フレーズ</div><div class="stat-v"><span id="s-idx">1</span>/<span id="s-tot"></span></div></div>
@@ -140,12 +140,10 @@ button.secondary:active { background: #f4f4f0; }
     <div class="phrase-box" id="phrase"></div>
 
     <div class="input-label">▼ ここに入力してください</div>
-    <div class="input-wrap">
-      <input type="text" id="inp"
-        placeholder="タップして入力開始…"
-        autocomplete="off" autocorrect="off"
-        autocapitalize="off" spellcheck="false">
-    </div>
+    <input type="text" id="inp"
+      placeholder="タップして入力開始…"
+      autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false">
 
     <div class="match-status" id="match-status"></div>
     <div class="clear-msg" id="clear-msg"></div>
@@ -155,10 +153,9 @@ button.secondary:active { background: #f4f4f0; }
     </div>
   </div>
 
-  <!-- RESULT -->
   <div class="result-screen" id="scr-result" style="display:none">
-    <div style="font-size:22px;font-weight:700;margin-bottom:6px;">お疲れ様でした！</div>
-    <div style="font-size:13px;color:#aaa;margin-bottom:4px;">全フレーズクリア</div>
+    <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;">お疲れ様でした！</div>
+    <div style="font-size:13px;color:#666;margin-bottom:4px;">全フレーズクリア</div>
     <div class="res-grid">
       <div class="res-box"><div class="res-l">タイム</div><div class="res-v" id="r-time">-</div></div>
       <div class="res-box"><div class="res-l">正確率</div><div class="res-v" id="r-acc">-</div></div>
@@ -169,45 +166,61 @@ button.secondary:active { background: #f4f4f0; }
 </div>
 
 <script>
-// ================================================================
-// フレーズ定義
-// target: 入力と比較する文字列（ひらがな or 英語）
-// disp:   画面に表示する文字列
-// ================================================================
 const PHRASES = [
-  { disp:'荒川に振替とりに行って来て',               target:'あらかわにふりかえとりにいってきて' },
-  { disp:'一旦カート回収お願いします。',              target:'いったんかーとかいしゅうおねがいします。' },
-  { disp:'上の人呼んで',                              target:'うえのひとよんで' },
-  { disp:'英語分かる人いる？',                        target:'えいごわかるひといる？' },
-  { disp:'オリコンの大きさ違うじゃん！',              target:'おりこんのおおきさちがうじゃん！' },
-  { disp:'カートが道においてあるって電話が入ってます', target:'かーとがみちにおいてあるってでんわがはいってます' },
-  { disp:'救急車呼んで！',                            target:'きゅうきゅうしゃよんで！' },
-  { disp:'苦情はどこで言ったらいいの？',              target:'くじょうはどこでいったらいいの？' },
-  { disp:'健康診断は決まって休みの日',                target:'けんこうしんだんはきまってやすみのひ' },
-  { disp:'小高常務の売り場づくりセンス',              target:'こだかじょうむのうりばづくりせんす' },
-  { disp:'Yeah, we global — JOYFUL Honda,',           target:'yeah, we global — joyful honda,' },
-  { disp:'Building dreams from Kanto to Uganda.',     target:'building dreams from kanto to uganda.' },
-  { disp:'Power tools, garden gear, all in stock,',   target:'power tools, garden gear, all in stock,' },
-  { disp:'Open the doors, 6AM — tick to tock.',       target:'open the doors, 6am — tick to tock.' },
+  { disp:'無駄',                         target:'むだ' },
+  { disp:'やべぇ奴じゃん',               target:'やべぇやつじゃん' },
+  { disp:'流石です',                      target:'さすがです' },
+  { disp:'別に死なないでしょ',            target:'べつにしなないでしょ' },
+  { disp:'ダセエ',                        target:'だせえ' },
+  { disp:'少し遅れます',                  target:'すこしおくれます' },
+  { disp:'先に行ってます',                target:'さきにいってます' },
+  { disp:'オザマス',                      target:'おざます' },
+  { disp:'全く意味ない',                  target:'まったくいみない' },
+  { disp:'表があれば必ず裏がある',         target:'おもてがあればかならずうらがある' },
+  { disp:'完全に陰謀論',                  target:'かんぜんにいんぼうろん' },
+  { disp:'死なないって',                  target:'しなないって' },
+  { disp:'嫌だねぇ',                      target:'いやだねぇ' },
+  { disp:'問題ない',                      target:'もんだいない' },
+  { disp:'じゃあ後で',                    target:'じゃああとで' },
+  { disp:'アザマス',                      target:'あざます' },
+  { disp:'明日飯どお？',                  target:'あしためしどお？' },
+  { disp:'なんでやねん',                  target:'なんでやねん' },
+  { disp:'何時頃？',                      target:'なんじごろ？' },
+  { disp:'宇宙人実はいない',              target:'うちゅうじんじつはいない' },
+  { disp:'全部意味ないから',              target:'ぜんぶいみないから' },
+  { disp:'無理だなぁ',                    target:'むりだなぁ' },
+  { disp:'神は見てる',                    target:'かみはみてる' },
+  { disp:'明後日飲み行く？',              target:'あさってのみいく？' },
+  { disp:'テンション上がるねぇ',          target:'てんしょんあがるねぇ' },
+  { disp:'狂気',                          target:'きょうき' },
+  { disp:'どうもすいませんでした',         target:'どうもすいませんでした' },
+  { disp:'確かに',                        target:'たしかに' },
+  { disp:'セコいしてますか？',             target:'せこいしてますか？' },
+  { disp:'色々あって迷っちゃうなぁ',       target:'いろいろあってまよっちゃうなぁ' },
+  { disp:'大丈夫ですよ行けますよ',         target:'だいじょうぶですよいけますよ' },
+  { disp:'人生楽しいねぇ',                target:'じんせいたのしいねぇ' },
+  { disp:'ただ今緊急で動画を回してます',   target:'ただいまきんきゅうでどうがをまわしてます' },
+  { disp:'めっちゃイイっすね',            target:'めっちゃいいっすね' },
+  { disp:'了解',                          target:'りょうかい' },
+  { disp:'今日飯行きますか？',             target:'きょうめしいきますか？' },
+  { disp:'来週ご飯行けますか？',           target:'らいしゅうごはんいけますか？' },
 ];
 
-// カタカナ→ひらがな変換
+// カタカナ→ひらがな
 function toHira(str) {
-  return str.replace(/[\u30A1-\u30F6]/g, c =>
-    String.fromCharCode(c.charCodeAt(0) - 0x60)
-  );
+  return str.replace(/[\u30A1-\u30F6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 }
 
-// ローマ字→ひらがな変換テーブル（長い順）
+// ローマ字→ひらがな
 const ROMA_TABLE = [
-  ['sha','し'],['shi','し'],['shu','し'],['sho','し'],
+  ['sha','し'],['shi','し'],['shu','しゅ'],['sho','しょ'],
   ['chi','ち'],['tchi','っち'],['cchi','っち'],
   ['tsu','つ'],['ttsu','っつ'],
-  ['sya','し'],['syu','し'],['syo','し'],
-  ['tya','ち'],['tyu','ち'],['tyo','ち'],
-  ['cya','ち'],['cyu','ち'],['cyo','ち'],
-  ['zya','じ'],['zyu','じ'],['zyo','じ'],
-  ['jya','じ'],['jyu','じ'],['jyo','じ'],
+  ['sya','し'],['syu','しゅ'],['syo','しょ'],
+  ['tya','ち'],['tyu','ちゅ'],['tyo','ちょ'],
+  ['cya','ち'],['cyu','ちゅ'],['cyo','ちょ'],
+  ['zya','じゃ'],['zyu','じゅ'],['zyo','じょ'],
+  ['jya','じゃ'],['jyu','じゅ'],['jyo','じょ'],
   ['nya','にゃ'],['nyu','にゅ'],['nyo','にょ'],
   ['hya','ひゃ'],['hyu','ひゅ'],['hyo','ひょ'],
   ['mya','みゃ'],['myu','みゅ'],['myo','みょ'],
@@ -234,7 +247,7 @@ const ROMA_TABLE = [
   ['ma','ま'],['mi','み'],['mu','む'],['me','め'],['mo','も'],
   ['ya','や'],['yu','ゆ'],['yo','よ'],
   ['ra','ら'],['ri','り'],['ru','る'],['re','れ'],['ro','ろ'],
-  ['wa','わ'],['wo','を'],['wi','ゐ'],['we','ゑ'],
+  ['wa','わ'],['wo','を'],
   ['a','あ'],['i','い'],['u','う'],['e','え'],['o','お'],
   ['n','ん'],
 ];
@@ -245,48 +258,37 @@ function romaToHira(str) {
   let s = str.toLowerCase();
   let i = 0;
   while (i < s.length) {
-    // っ：同じ子音2連打
     if (i+1 < s.length && s[i] === s[i+1] && /[bcdfghjklmnpqrstvwxyz]/.test(s[i]) && s[i] !== 'n') {
       result += 'っ';
-      i++;
-      continue;
+      i++; continue;
     }
     let matched = false;
     for (const [roma, hira] of ROMA_TABLE) {
       if (s.slice(i, i+roma.length) === roma) {
         result += hira;
         i += roma.length;
-        matched = true;
-        break;
+        matched = true; break;
       }
     }
-    if (!matched) {
-      result += s[i];
-      i++;
-    }
+    if (!matched) { result += s[i]; i++; }
   }
   return result;
 }
 
-// 入力文字列を正規化してターゲットと比較できる形にする
 function normalize(str) {
   let s = str;
-  s = toHira(s);           // カタカナ→ひらがな
-  s = romaToHira(s);       // ローマ字→ひらがな（かな入力の場合はそのまま残る）
+  s = toHira(s);
+  s = romaToHira(s);
   s = s.toLowerCase();
+  // 長音符→ー
+  s = s.replace(/ｰ/g, 'ー');
   return s;
 }
 
-// ================================================================
-// ゲーム状態
-// ================================================================
-let pIdx = 0;
-let missCount = 0;
-let totalTyped = 0;
-let startTime = null;
-let timerInt = null;
-let active = false;
-let prevNorm = ''; // 前回の正規化済み入力（ミスカウント用）
+let pIdx=0, missCount=0, totalTyped=0;
+let startTime=null, timerInt=null;
+let active=false, prevNorm='';
+let cleared=false;
 
 const inp = document.getElementById('inp');
 
@@ -300,22 +302,19 @@ function startGame() {
   pIdx=0; missCount=0; totalTyped=0;
   startTime=null; clearInterval(timerInt);
   document.getElementById('s-tot').textContent = PHRASES.length;
-  active = true;
+  active=true; cleared=false;
   show('scr-game');
   loadPhrase();
   setTimeout(() => inp.focus(), 300);
 }
 
 function loadPhrase() {
-  prevNorm = '';
-  inp.value = '';
-  inp.className = '';
-  document.getElementById('clear-msg').textContent = '';
-  document.getElementById('match-status').innerHTML = '';
+  prevNorm=''; cleared=false;
+  inp.value=''; inp.className='';
+  document.getElementById('clear-msg').textContent='';
+  document.getElementById('match-status').innerHTML='';
   document.getElementById('s-idx').textContent = pIdx+1;
   document.getElementById('prog').style.width = (pIdx/PHRASES.length*100)+'%';
-
-  // お手本表示
   document.getElementById('phrase').textContent = PHRASES[pIdx].disp;
   inp.focus();
 }
@@ -326,29 +325,22 @@ function updateStats() {
   document.getElementById('s-miss').textContent = missCount;
 }
 
-// ================================================================
-// 入力イベント（IME確定後も含め全対応）
-// ================================================================
 inp.addEventListener('input', function() {
-  if (!active) return;
-
-  // タイマー開始
-  if (!startTime && inp.value.length > 0) {
+  if (!active || cleared) return;
+  if (!startTime && inp.value.length>0) {
     startTime = Date.now();
     timerInt = setInterval(() => {
       document.getElementById('s-time').textContent =
         ((Date.now()-startTime)/1000).toFixed(1);
     }, 100);
   }
-
   const raw = inp.value;
   const norm = normalize(raw);
   const target = PHRASES[pIdx].target;
 
-  // ミスカウント：前回より長くなった分だけ確認
   if (norm.length > prevNorm.length) {
     const added = norm.length - prevNorm.length;
-    for (let i = 0; i < added; i++) {
+    for (let i=0; i<added; i++) {
       const pos = prevNorm.length + i;
       if (pos < target.length) {
         totalTyped++;
@@ -358,23 +350,18 @@ inp.addEventListener('input', function() {
   }
   prevNorm = norm;
   updateStats();
+  renderMatch(norm, target);
 
-  // マッチ状態を表示
-  renderMatchStatus(norm, target);
-
-  // 完全一致チェック
   if (norm === target) {
+    cleared = true;
     inp.className = 'correct';
     document.getElementById('clear-msg').textContent = '✓ クリア！';
-    document.getElementById('match-status').innerHTML = '';
-    setTimeout(() => {
-      nextPhrase();
-    }, 600);
+    document.getElementById('match-status').innerHTML='';
+    setTimeout(() => nextPhrase(), 600);
   } else if (norm.length > 0) {
-    // 先頭から合っているかどうかでborder色を変える
     let ok = true;
-    for (let i = 0; i < norm.length; i++) {
-      if (i >= target.length || norm[i] !== target[i]) { ok=false; break; }
+    for (let i=0; i<norm.length; i++) {
+      if (i>=target.length || norm[i]!==target[i]) { ok=false; break; }
     }
     inp.className = ok ? '' : 'wrong';
   } else {
@@ -382,38 +369,31 @@ inp.addEventListener('input', function() {
   }
 });
 
-function renderMatchStatus(norm, target) {
+function renderMatch(norm, target) {
   const el = document.getElementById('match-status');
   el.innerHTML = '';
-
-  // 最大30文字分表示
-  const len = Math.max(norm.length + 5, 15);
-  for (let i = 0; i < Math.min(len, target.length); i++) {
-    const span = document.createElement('span');
-    span.className = 'match-char';
-    span.textContent = target[i];
-    if (i < norm.length) {
-      span.classList.add(norm[i] === target[i] ? 'ok' : 'ng');
-    } else {
-      span.classList.add('rest');
-    }
-    el.appendChild(span);
+  const showLen = Math.min(target.length, Math.max(norm.length+8, 12));
+  for (let i=0; i<showLen; i++) {
+    const sp = document.createElement('span');
+    sp.className = 'match-char';
+    sp.textContent = target[i];
+    if (i<norm.length) sp.classList.add(norm[i]===target[i]?'ok':'ng');
+    else sp.classList.add('rest');
+    el.appendChild(sp);
   }
-  if (target.length > len) {
+  if (target.length > showLen) {
     const more = document.createElement('span');
-    more.className = 'match-char rest';
-    more.textContent = '…';
+    more.className='match-char rest';
+    more.textContent='…';
     el.appendChild(more);
   }
 }
 
 function nextPhrase() {
-  pIdx++;
-  inp.value=''; inp.className='';
-  prevNorm='';
+  pIdx++; inp.value=''; inp.className=''; prevNorm='';
   document.getElementById('clear-msg').textContent='';
   document.getElementById('match-status').innerHTML='';
-  if (pIdx >= PHRASES.length) { endGame(); return; }
+  if (pIdx>=PHRASES.length) { endGame(); return; }
   loadPhrase();
 }
 
@@ -421,21 +401,20 @@ function skipPhrase() {
   if (!active) return;
   const target = PHRASES[pIdx].target;
   const norm = normalize(inp.value);
-  const remaining = Math.max(0, target.length - norm.length);
-  missCount += remaining;
-  totalTyped += remaining;
+  missCount += Math.max(0, target.length - norm.length);
+  totalTyped += Math.max(0, target.length - norm.length);
   updateStats();
   nextPhrase();
 }
 
 function endGame() {
   active=false; clearInterval(timerInt);
-  const t = startTime ? ((Date.now()-startTime)/1000).toFixed(1) : 0;
-  const acc = totalTyped>0 ? Math.round((totalTyped-missCount)/totalTyped*100) : 100;
+  const t = startTime?((Date.now()-startTime)/1000).toFixed(1):0;
+  const acc = totalTyped>0?Math.round((totalTyped-missCount)/totalTyped*100):100;
   document.getElementById('r-time').textContent = t+'s';
   document.getElementById('r-acc').textContent = acc+'%';
   document.getElementById('r-miss').textContent = missCount;
-  document.getElementById('prog').style.width = '100%';
+  document.getElementById('prog').style.width='100%';
   show('scr-result');
 }
 
