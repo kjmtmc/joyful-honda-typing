@@ -197,9 +197,9 @@ const CUR=document.getElementById('cursor');
 const TH=document.getElementById('tap-hint');
 
 function focusInp(){
-  inp.focus();
+  document.getElementById('inp').focus();
 }
-document.getElementById('card').addEventListener('click',e=>{if(active&&e.target.tagName!=='BUTTON')focusInp();});
+document.getElementById('card').addEventListener('click',e=>{if(active&&e.target.tagName!=='BUTTON')document.getElementById('inp').focus();});
 inp.addEventListener('focus',()=>{ID.classList.add('focused');CUR.style.display='inline-block';IP.style.display='none';TH.classList.add('active');TH.textContent='⌨️ 入力中…';});
 inp.addEventListener('blur',()=>{ID.classList.remove('focused');CUR.style.display='none';if(!inp.value)IP.style.display='';if(active){TH.classList.remove('active');TH.textContent='画面をタップすると再入力できます';}});
 
@@ -237,7 +237,8 @@ function updateStats(){
   document.getElementById('s-miss').textContent=miss;
 }
 
-inp.addEventListener('input',function(){
+function onInput(){
+  const inp=document.getElementById('inp');
   if(!active||cleared)return;
   if(!startTime&&inp.value.length>0){
     startTime=Date.now();
@@ -264,7 +265,8 @@ inp.addEventListener('input',function(){
   } else {
     ID.className='input-display focused';
   }
-});
+}
+inp.addEventListener('input',onInput);
 
 function renderMatch(norm,target){
   const el=document.getElementById('match-status');el.innerHTML='';
@@ -277,18 +279,38 @@ function renderMatch(norm,target){
   if(target.length>len){const m=document.createElement('span');m.className='mc rest';m.textContent='…';el.appendChild(m);}
 }
 
+function recreateInp(){
+  // input要素を作り直してIMEを完全リセット
+  const old=document.getElementById('inp');
+  const newInp=document.createElement('input');
+  newInp.type='text';
+  newInp.id='inp';
+  newInp.autocomplete='off';
+  newInp.autocorrect='off';
+  newInp.autocapitalize='off';
+  newInp.spellcheck=false;
+  newInp.setAttribute('inputmode','text');
+  newInp.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;font-size:16px;';
+  old.parentNode.replaceChild(newInp,old);
+  // イベント再登録
+  newInp.addEventListener('focus',()=>{ID.classList.add('focused');CUR.style.display='inline-block';IP.style.display='none';TH.classList.add('active');TH.textContent='⌨️ 入力中…';});
+  newInp.addEventListener('blur',()=>{ID.classList.remove('focused');CUR.style.display='none';if(!newInp.value)IP.style.display='';if(active){TH.classList.remove('active');TH.textContent='画面をタップすると再入力できます';}});
+  newInp.addEventListener('input',onInput);
+  return newInp;
+}
+
 function nextPhrase(){
   pIdx++;
-  // 入力欄を完全リセット
-  inp.blur();
-  inp.value='';
   IT.textContent='';IP.style.display='';prevN='';
   document.getElementById('clear-msg').textContent='';
   document.getElementById('match-status').innerHTML='';
   if(pIdx>=PHRASES.length){endGame();return;}
   loadPhrase();
-  // 少し待ってからフォーカス（DOMが更新された後）
-  setTimeout(()=>{inp.value='';inp.focus();},50);
+  // input要素を作り直してフォーカス
+  const newInp=recreateInp();
+  // グローバルinpを更新
+  window.inp=newInp;
+  setTimeout(()=>newInp.focus(),30);
 }
 
 function skipPhrase(){
@@ -310,15 +332,15 @@ function endGame(){
 
 document.getElementById('btn-start').addEventListener('click',function(){
   startGame();
-  inp.focus(); // ボタンクリックの直後にfocus（iOS対応）
+  document.getElementById('inp').focus();
 });
 document.getElementById('btn-skip').addEventListener('click',function(){
   skipPhrase();
-  inp.focus();
+  document.getElementById('inp').focus();
 });
 document.getElementById('btn-retry').addEventListener('click',function(){
   startGame();
-  inp.focus();
+  document.getElementById('inp').focus();
 });
 </script>
 </body>
