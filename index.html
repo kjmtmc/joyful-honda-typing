@@ -7,20 +7,20 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#111;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1rem;}
-.card{background:#1a1a1a;border-radius:16px;padding:1.5rem;max-width:480px;width:100%;margin-top:0.5rem;}
+.card{background:#1a1a1a;border-radius:16px;padding:1.5rem;max-width:480px;width:100%;margin-top:0.5rem;padding-bottom:40vh;}
 h1{font-size:18px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;}
 .sub{font-size:11px;color:#666;text-align:center;letter-spacing:.12em;margin-bottom:1.5rem;}
-.stats{display:flex;gap:8px;margin-bottom:1rem;}
+.stats{display:flex;gap:8px;margin-bottom:0.6rem;}
 .stat{flex:1;background:#222;border-radius:10px;padding:8px 4px;text-align:center;}
 .stat-l{font-size:10px;color:#666;margin-bottom:2px;}
 .stat-v{font-size:16px;font-weight:700;color:#fff;}
-.prog-wrap{height:4px;background:#333;border-radius:2px;margin-bottom:1rem;overflow:hidden;}
+.prog-wrap{height:4px;background:#333;border-radius:2px;margin-bottom:0.6rem;overflow:hidden;}
 .prog-bar{height:100%;background:#ff6600;border-radius:2px;transition:width .3s;}
-.stamp-wrap{display:flex;justify-content:center;margin-bottom:1rem;}
-.stamp-img{width:200px;height:200px;object-fit:cover;border-radius:12px;border:3px solid #ff6600;display:block;}
-.stamp-none{width:200px;height:200px;border-radius:12px;border:3px solid #444;background:#222;display:flex;align-items:center;justify-content:center;color:#555;font-size:13px;}
+.stamp-wrap{display:flex;justify-content:center;margin-bottom:0.75rem;}
+.stamp-img{width:140px;height:140px;object-fit:cover;border-radius:10px;border:3px solid #ff6600;display:block;}
+.stamp-none{width:140px;height:140px;border-radius:10px;border:3px solid #444;background:#222;display:flex;align-items:center;justify-content:center;color:#555;font-size:13px;}
 .phrase-label{font-size:11px;color:#666;margin-bottom:6px;}
-.phrase-box{background:#222;border:2px solid #444;border-radius:12px;padding:.8rem 1.2rem;margin-bottom:1rem;min-height:48px;display:flex;flex-wrap:wrap;align-items:center;font-size:1.4rem;line-height:2;color:#fff;font-weight:700;letter-spacing:.05em;}
+.phrase-box{background:#222;border:2px solid #444;border-radius:12px;padding:.6rem 1rem;margin-bottom:0.75rem;min-height:44px;display:flex;flex-wrap:wrap;align-items:center;font-size:1.25rem;line-height:1.8;color:#fff;font-weight:700;letter-spacing:.05em;}
 #inp{position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;font-size:16px;}
 .input-display{background:#222;border:2px solid #444;border-radius:12px;padding:12px 16px;margin-bottom:8px;min-height:50px;font-size:17px;color:#fff;cursor:pointer;transition:border-color .2s;display:flex;align-items:center;flex-wrap:wrap;word-break:break-all;}
 .input-display.focused{border-color:#ff6600;}
@@ -196,7 +196,13 @@ const IP=document.getElementById('inp-ph');
 const CUR=document.getElementById('cursor');
 const TH=document.getElementById('tap-hint');
 
-function focusInp(){inp.focus();}
+function focusInp(){
+  inp.focus();
+  setTimeout(()=>{
+    const el=document.getElementById('input-display');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },300);
+}
 document.getElementById('card').addEventListener('click',e=>{if(active&&e.target.tagName!=='BUTTON')focusInp();});
 inp.addEventListener('focus',()=>{ID.classList.add('focused');CUR.style.display='inline-block';IP.style.display='none';TH.classList.add('active');TH.textContent='⌨️ 入力中…';});
 inp.addEventListener('blur',()=>{ID.classList.remove('focused');CUR.style.display='none';if(!inp.value)IP.style.display='';if(active){TH.classList.remove('active');TH.textContent='画面をタップすると再入力できます';}});
