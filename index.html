@@ -7,7 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#111;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1rem;}
-.card{background:#1a1a1a;border-radius:16px;padding:1.5rem;max-width:480px;width:100%;margin-top:0.5rem;padding-bottom:40vh;}
+.card{background:#1a1a1a;border-radius:16px;padding:1.5rem;max-width:480px;width:100%;margin-top:0.5rem;padding-bottom:50vh;}
 h1{font-size:18px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;}
 .sub{font-size:11px;color:#666;text-align:center;letter-spacing:.12em;margin-bottom:1.5rem;}
 .stats{display:flex;gap:8px;margin-bottom:0.6rem;}
@@ -198,10 +198,6 @@ const TH=document.getElementById('tap-hint');
 
 function focusInp(){
   inp.focus();
-  setTimeout(()=>{
-    const el=document.getElementById('input-display');
-    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
-  },300);
 }
 document.getElementById('card').addEventListener('click',e=>{if(active&&e.target.tagName!=='BUTTON')focusInp();});
 inp.addEventListener('focus',()=>{ID.classList.add('focused');CUR.style.display='inline-block';IP.style.display='none';TH.classList.add('active');TH.textContent='⌨️ 入力中…';});
@@ -212,7 +208,7 @@ function show(id){['scr-start','scr-game','scr-result'].forEach(s=>document.getE
 function startGame(){
   pIdx=0;miss=0;typed=0;startTime=null;clearInterval(tmr);
   document.getElementById('s-tot').textContent=PHRASES.length;
-  active=true;cleared=false;show('scr-game');loadPhrase();setTimeout(focusInp,100);
+  active=true;cleared=false;show('scr-game');loadPhrase();
 }
 
 function loadPhrase(){
@@ -233,7 +229,6 @@ function loadPhrase(){
     const d=document.createElement('div');d.className='stamp-none';d.textContent='画像なし';sw.appendChild(d);
   }
   TH.classList.remove('active');TH.textContent='画面のどこかをタップすると入力できます';
-  setTimeout(focusInp,50);
 }
 
 function updateStats(){
@@ -288,6 +283,7 @@ function nextPhrase(){
   document.getElementById('match-status').innerHTML='';
   if(pIdx>=PHRASES.length){endGame();return;}
   loadPhrase();
+  inp.focus();
 }
 
 function skipPhrase(){
@@ -307,9 +303,18 @@ function endGame(){
   show('scr-result');
 }
 
-document.getElementById('btn-start').addEventListener('click',startGame);
-document.getElementById('btn-skip').addEventListener('click',skipPhrase);
-document.getElementById('btn-retry').addEventListener('click',startGame);
+document.getElementById('btn-start').addEventListener('click',function(){
+  startGame();
+  inp.focus(); // ボタンクリックの直後にfocus（iOS対応）
+});
+document.getElementById('btn-skip').addEventListener('click',function(){
+  skipPhrase();
+  inp.focus();
+});
+document.getElementById('btn-retry').addEventListener('click',function(){
+  startGame();
+  inp.focus();
+});
 </script>
 </body>
 </html>
