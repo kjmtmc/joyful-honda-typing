@@ -7,14 +7,14 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#111;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1rem;}
-.card{background:#1a1a1a;border-radius:16px;padding:1.5rem;max-width:480px;width:100%;margin-top:0.5rem;padding-bottom:50vh;}
+.card{background:#1a1a1a;border-radius:16px;padding:1.5rem;max-width:480px;width:100%;margin-top:0.5rem;padding-bottom:50vh;padding-top:68px;}
 h1{font-size:18px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;}
 .sub{font-size:11px;color:#666;text-align:center;letter-spacing:.12em;margin-bottom:1.5rem;}
-.stats{display:flex;gap:8px;margin-bottom:0.6rem;}
+.stats{display:flex;gap:8px;position:fixed;top:0;left:0;right:0;z-index:100;background:#111;padding:8px 1rem;box-shadow:0 2px 8px rgba(0,0,0,0.5);}
 .stat{flex:1;background:#222;border-radius:10px;padding:8px 4px;text-align:center;}
 .stat-l{font-size:10px;color:#666;margin-bottom:2px;}
 .stat-v{font-size:16px;font-weight:700;color:#fff;}
-.prog-wrap{height:4px;background:#333;border-radius:2px;margin-bottom:0.6rem;overflow:hidden;}
+.prog-wrap{height:4px;background:#333;border-radius:0;margin-bottom:0;overflow:hidden;position:fixed;top:52px;left:0;right:0;z-index:100;}
 .prog-bar{height:100%;background:#ff6600;border-radius:2px;transition:width .3s;}
 .stamp-wrap{display:flex;justify-content:center;margin-bottom:0.75rem;}
 .stamp-img{width:140px;height:140px;object-fit:cover;border-radius:10px;border:3px solid #ff6600;display:block;}
@@ -41,7 +41,7 @@ h1{font-size:18px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px
 button{flex:1;background:#ff6600;color:#fff;border:none;border-radius:10px;padding:13px 16px;font-size:15px;cursor:pointer;font-family:inherit;font-weight:700;-webkit-appearance:none;touch-action:manipulation;}
 button:active{opacity:.8;}
 button.sec{background:#222;color:#aaa;border:1.5px solid #333;}
-.start-screen,.result-screen{text-align:center;padding:2rem 0;}
+.start-screen,.result-screen{text-align:center;padding:2rem 0;}.start-screen~* .stats,.result-screen~* .stats{position:static;}
 .start-screen p{font-size:15px;color:#aaa;line-height:1.9;margin-bottom:1.5rem;}
 .start-screen button,.result-screen button{font-size:17px;padding:16px;width:100%;flex:none;}
 .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1.5rem 0;}
@@ -202,7 +202,7 @@ function focusInp(){
     const el=document.getElementById('input-display');
     if(el){
       const rect=el.getBoundingClientRect();
-      const offset=rect.top+window.scrollY-120;
+      const offset=rect.top+window.scrollY-80;
       window.scrollTo({top:offset,behavior:'smooth'});
     }
   },400);
@@ -211,7 +211,18 @@ document.getElementById('card').addEventListener('click',e=>{if(active&&e.target
 inp.addEventListener('focus',()=>{ID.classList.add('focused');CUR.style.display='inline-block';IP.style.display='none';TH.classList.add('active');TH.textContent='⌨️ 入力中…';});
 inp.addEventListener('blur',()=>{ID.classList.remove('focused');CUR.style.display='none';if(!inp.value)IP.style.display='';if(active){TH.classList.remove('active');TH.textContent='画面をタップすると再入力できます';}});
 
-function show(id){['scr-start','scr-game','scr-result'].forEach(s=>document.getElementById(s).style.display=(s===id?'':'none'));}
+function show(id){
+  ['scr-start','scr-game','scr-result'].forEach(s=>document.getElementById(s).style.display=(s===id?'':'none'));
+  const stats=document.querySelector('.stats');
+  const prog=document.querySelector('.prog-wrap');
+  if(id==='scr-game'){
+    if(stats)stats.style.display='flex';
+    if(prog)prog.style.display='block';
+  } else {
+    if(stats)stats.style.display='none';
+    if(prog)prog.style.display='none';
+  }
+}
 
 function startGame(){
   pIdx=0;miss=0;typed=0;startTime=null;clearInterval(tmr);
